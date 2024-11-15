@@ -41,7 +41,7 @@ The `CourseAPIController.cs` handles API requests related to courses, and the vi
 1. Install MySQL and create a database (`school_db`).
 2. Update the connection string with your MySQL credentials.
 3. Run the application using the command `F5`.
-4. Use command prompt or browser (Swagger) to test the API.
+4. Use command prompt or browser (`Swagger`) to test the API.
 
 ## API Endpoints
 
