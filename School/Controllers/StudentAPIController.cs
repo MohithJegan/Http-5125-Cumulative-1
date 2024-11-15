@@ -94,7 +94,8 @@ namespace School.Controllers
                 MySqlCommand Command = Connection.CreateCommand();
 
                 // Set the SQL Query
-                Command.CommandText = "SELECT * FROM students WHERE studentid="+id;
+                Command.CommandText = "SELECT * FROM students WHERE studentid=@id";
+                Command.Parameters.AddWithValue("@id", id);
 
                 // Gather Result Set of Query into a variable
                 using (MySqlDataReader ResultSet = Command.ExecuteReader())

@@ -163,7 +163,8 @@ namespace School.Controllers
                 MySqlCommand Command = Connection.CreateCommand();
 
                 //  Set the SQL Command
-                Command.CommandText = "SELECT * FROM teachers WHERE teacherid="+id;
+                Command.CommandText = "SELECT * FROM teachers WHERE teacherid=@id";
+                Command.Parameters.AddWithValue("@id", id);
 
                 // Gather Result Set of Query into a variable
                 using (MySqlDataReader ResultSet = Command.ExecuteReader())
