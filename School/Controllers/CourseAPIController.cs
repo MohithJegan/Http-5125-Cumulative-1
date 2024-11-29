@@ -118,5 +118,106 @@ namespace School.Controllers
             // Return the final list of course names
             return SelectedCourse;
         }
+
+
+
+        /// curl -X "POST" -H "Content-Type: application/json" -d "{\"courseCode\": \"Math 104\",\"teacherId\": 0,\"startDate\": \"2019-01-15 00:00:00\",\"finishDate\": \"2019-04-30 00:00:00\",\"courseName\": \"Statistics\"}" "https://localhost:7151/api/Course/AddCourse"
+
+        /// <summary>
+        /// Adds a course to the database
+        /// </summary>
+        /// <param name="CourseData">Course Object</param>
+        /// <example>
+        /// POST: api/Course/AddCourse
+        /// Headers: Content-Type: application/json
+        /// Request Body:
+        /// {
+        /// "CourseCode": "http 5110",
+        /// "TeacherId": 0,
+        /// "StartDate": "01-15-2019",
+        /// "FinishDate": "04-30-2019",
+        /// "CourseName": "Web Development"
+        /// } -> 25
+        /// </example>
+        /// <returns>
+        /// The inserted Course Id from the database if successful. 0 if Unsuccessful
+        /// </returns>
+
+        [HttpPost(template: "AddCourse")]
+        public int AddCourse([FromBody]Course CourseData)
+        {
+            // 'using' will close the connection after the code executes
+            using (MySqlConnection Connection = _context.AccessDatabase())
+            {
+                // Open the connection
+                Connection.Open();
+
+                // Establish a new command (query) for our database
+                MySqlCommand Command = Connection.CreateCommand();
+
+                // Set the SQL Command
+                Command.CommandText = "INSERT INTO courses(coursecode,teacherid,startdate,finishdate,coursename) VALUES(@coursecode,@teacherid,@startdate,@finishdate,@coursename)";
+
+                Command.Parameters.AddWithValue("@coursecode", CourseData.CourseCode);
+                Command.Parameters.AddWithValue("@teacherid", CourseData.TeacherId);
+                Command.Parameters.AddWithValue("@startdate", CourseData.StartDate);
+                Command.Parameters.AddWithValue("@finishdate", CourseData.FinishDate);
+                Command.Parameters.AddWithValue("@coursename", CourseData.CourseName);
+
+                Command.ExecuteNonQuery();
+
+                // Send the last inserted id of the data created
+                return Convert.ToInt32(Command.LastInsertedId);
+            }
+                // if failure
+                return 0;
+        }
+
+        /// curl -X "DELETE" "https://localhost:7151/api/Course/DeleteCourse/15"
+
+        /// <summary>
+        /// Deletes a Course from the database
+        /// </summary>
+        /// <param name="CourseId">Primary key of the course to delete</param>
+        /// <example>
+        /// DELETE: api/Course/DeleteCourse -> 1
+        /// </example>
+        /// <returns>
+        /// It returns the string "The course with given id {courseid} has been removed from the DB" if the course id is found in DB, otherwise it returns the string "The course with given id {courseid} is not found"
+        /// </returns>
+
+        [HttpDelete(template: "DeleteCourse/{CourseId}")]
+        public string DeleteCourse(int CourseId)
+        {
+            // initialize the variable to track the rows affected
+            int RowsAffected = 0;
+
+            // 'using' will close the connection after the code executes
+            using (MySqlConnection Connection = _context.AccessDatabase())
+            {
+                // Open the connection
+                Connection.Open();
+
+                // Establish a new command (query) for our database
+                MySqlCommand Command = Connection.CreateCommand();
+
+                // Set the SQL Command
+                Command.CommandText = "DELETE FROM courses WHERE courseid=@id";
+                Command.Parameters.AddWithValue("@id", CourseId);
+
+                RowsAffected = Command.ExecuteNonQuery();
+            }
+            // Check for the deletion
+            if (RowsAffected > 0)
+            {
+                return $"The course with given id {CourseId} has been removed from the DB";
+            }
+            else
+            {
+                return $"The course with given id {CourseId} is not found";
+            }
+
+        }
+        
     }
 }
