@@ -177,7 +177,7 @@ namespace School.Controllers
         /// </summary>
         /// <param name="StudentId">Primary key of the student to delete</param>
         /// <example>
-        /// DELETE: api/Student/DeleteStudent -> 1
+        /// DELETE: api/Student/DeleteStudent/{StudentId} -> "The student with given id {StudentId} has been removed from the DB"
         /// </example>
         /// <returns>
         /// It returns the string "The student with given id {studentid} has been removed from the DB" if the student id is found in DB, otherwise it returns the string "The student with given id {studentid} is not found"

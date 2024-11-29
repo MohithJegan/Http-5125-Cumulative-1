@@ -180,7 +180,7 @@ namespace School.Controllers
         /// </summary>
         /// <param name="CourseId">Primary key of the course to delete</param>
         /// <example>
-        /// DELETE: api/Course/DeleteCourse -> 1
+        /// DELETE: api/Course/DeleteCourse/{CourseId} -> "The course with given id {CourseId} has been removed from the DB"
         /// </example>
         /// <returns>
         /// It returns the string "The course with given id {courseid} has been removed from the DB" if the course id is found in DB, otherwise it returns the string "The course with given id {courseid} is not found"
