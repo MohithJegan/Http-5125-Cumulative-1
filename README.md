@@ -14,7 +14,16 @@ The application contains three main controllers: **Teacher**, **Student**, and *
 - **TeacherPage/Show.cshtml**:  
   Displays detailed information about a specific teacher.
 
-The `TeacherAPIController.cs` exposes an API for interacting with teacher data, and the views are used to display this data in a user-friendly manner.
+- **TeacherPage/New.cshtml**:
+  Displays a form to add a teacher to the database.
+
+- **TeacherPage/DeleteConfirm.cshtml**:
+   Displays a delete confirmation page where the user can either confirm the deletion of a teacher or cancel to go back without performing the delete operation.
+
+- **TeacherPage/Validation.cshtml**:
+   Displays validation errors when the form is submitted with invalid data.
+
+The `TeacherAPIController.cs` exposes an API for interacting with teacher data, while the TeacherPage views handle displaying data, creating, and deleting teachers and perform validation.
 
 ### 2. **Student Controller**
 
@@ -24,7 +33,16 @@ The `TeacherAPIController.cs` exposes an API for interacting with teacher data, 
 - **StudentPage/Show.cshtml**:  
   Displays detailed information about a specific student.
 
-The `StudentAPIController.cs` provides the API for managing student data, and the views allow users to easily view and interact with the student information.
+- **StudentPage/New.cshtml**:
+  Displays a form to add a student to the database.
+
+- **StudentPage/DeleteConfirm.cshtml**:
+  Displays a delete confirmation page where the user can either confirm the deletion of a student or cancel to go back without performing the delete operation.
+
+- **StudentPage/Validation.cshtml**:
+  Displays validation errors when the form is submitted with invalid data.
+
+The `StudentAPIController.cs` exposes an API for interacting with student data, while the StudentPage views handle displaying data, creating, and deleting students and perform validation.
 
 ### 3. **Course Controller**
 
@@ -34,7 +52,16 @@ The `StudentAPIController.cs` provides the API for managing student data, and th
 - **CoursePage/Show.cshtml**:  
   Displays detailed information about a specific course.
 
-The `CourseAPIController.cs` handles API requests related to courses, and the views are used to show course details in a clear format.
+- **CoursePage/New.cshtml**:
+  Displays a form to add a course to the database.
+
+- **CoursePage/DeleteConfirm.cshtml**:
+  Displays a delete confirmation page where the user can either confirm the deletion of a course or cancel to go back without performing the delete operation.
+
+- **CoursePage/Validation.cshtml**:
+  Displays validation errors when the form is submitted with invalid data.
+
+The `CourseAPIController.cs` exposes an API for interacting with course data, while the CoursePage views handle displaying data, creating, and deleting courses and perform validation.
 
 ## Setup
 
@@ -46,18 +73,18 @@ The `CourseAPIController.cs` handles API requests related to courses, and the vi
 ## API Endpoints
 
 - **Teacher API**:  
-  `GET /api/ListTeachers`,  `GET /api/ListCourses`,  `GET /api/FindTeacher/{id}`
+  `GET /api/ListTeachers`,  `GET /api/ListCourses`,  `GET /api/FindTeacher/{id}`, `POST /api/AddTeacher`, `DELETE /api/DeleteTeacher/{TeacherId}`
 
 - **Course API**:  
-  `GET /api/ListCourses`, `GET /api/FindCourse/{id}`
+  `GET /api/ListCourses`, `GET /api/FindCourse/{id}`, `POST /api/AddCourse`, `DELETE /api/DeleteCourse/{CourseId}`
 
 - **Student API**:  
-  `GET /api/ListStudents`, `GET /api/FindStudent/{id}`
+  `GET /api/ListStudents`, `GET /api/FindStudent/{id}`, `POST /api/AddStudent`, `DELETE /api/DeleteStudent/{StudentId}`
 
 ## Views and Pages
 
-- **TeacherPage**: Contains the `List.cshtml` and `Show.cshtml` for displaying teacher information.
-- **StudentPage**: Contains the `List.cshtml` and `Show.cshtml` for displaying student information.
-- **CoursePage**: Contains the `List.cshtml` and `Show.cshtml` for displaying course information.
+- **TeacherPage**: The TeacherPage contains the following views: `List.cshtml`, `Show.cshtml`, `New.cshtml`, `DeleteConfirm.cshtml`, and `Validation.cshtml`. These views are used to display teacher information, create new teachers, delete existing teachers, and perform validation.
+- **StudentPage**: The StudentPage contains the following views: `List.cshtml`, `Show.cshtml`, `New.cshtml`, `DeleteConfirm.cshtml`, and `Validation.cshtml`. These views are used to display student information, create new students, delete existing students, and perform validation.
+- **CoursePage**: The CoursePage contains the following views: `List.cshtml`, `Show.cshtml`, `New.cshtml`, `DeleteConfirm.cshtml`, and `Validation.cshtml`. These views are used to display teacher information, create new courses, delete existing courses, and perform validation.
 
-These views make it easy for users to browse through lists of teachers, students, and courses, as well as view detailed information.
+These views make it easy for users to browse through lists of teachers, students, and courses, view detailed information, and perform add and delete operations.
