@@ -109,7 +109,7 @@ The `CourseAjaxPageController.cs` handles course data with JavaScript and Ajax, 
   `GET /api/ListStudents`, `GET /api/FindStudent/{id}`, `POST /api/AddStudent`, `DELETE /api/DeleteStudent/{StudentId}`, `PUT /api/UpdateStudent`
 
 ## Views and Pages
-- ### TeacherPage
+### 1. TeacherPage
 
 The **TeacherPage** contains the following views:
 
@@ -122,7 +122,7 @@ The **TeacherPage** contains the following views:
 
 These views help manage teacher information by supporting CRUD operations (Create, Read, Update, Delete) with validation.
 
-- ### StudentPage
+### 2. StudentPage
 
 The **StudentPage** contains the following views:
 
@@ -135,7 +135,7 @@ The **StudentPage** contains the following views:
 
 These views help manage student information by supporting CRUD operations (Create, Read, Update, Delete) with validation.
 
-- ### CoursePage
+### 3. CoursePage
 
 The **CoursePage** contains the following views:
 
@@ -148,21 +148,21 @@ The **CoursePage** contains the following views:
 
 These views help manage course information by supporting CRUD operations (Create, Read, Update, Delete) with validation.
 
-- ### TeacherAjaxPage
+### 4. TeacherAjaxPage
 
 The **TeacherAjaxPage** contains the following view:
 - **New.cshtml**: Provides a form to add a new teacher.
  
 This view helps add teacher information using JavaScript and Ajax.
 
-- ### StudentAjaxPage
+### 5. StudentAjaxPage
 
 The **StudentAjaxPage** contains the following view:
 - **New.cshtml**: Provides a form to add a new student.
  
 This view helps add student information using JavaScript and Ajax.
 
-- ### CourseAjaxPage
+### 6. CourseAjaxPage
 
 The **CourseAjaxPage** contains the following view:
 - **New.cshtml**: Provides a form to add a new course.
