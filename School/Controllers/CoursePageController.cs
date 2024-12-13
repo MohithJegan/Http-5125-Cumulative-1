@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using School.Models;
 
+
 namespace School.Controllers
 {
     public class CoursePageController : Controller
@@ -53,11 +54,25 @@ namespace School.Controllers
         [HttpPost]
         public IActionResult Create(Course CourseData)
         {
-         
+
+            // Check for start date
+            if (string.IsNullOrEmpty(CourseData.StartDate))
+            {
+                TempData["ErrorMessage"] = "Course start date cannot be empty.";
+                return RedirectToAction("Validation");
+            }
+
             // Check for future start date
             if (!string.IsNullOrEmpty(CourseData.StartDate) && DateTime.Parse(CourseData.StartDate) > DateTime.Now)
             {
                 TempData["ErrorMessage"] = "Course start date cannot be in future.";
+                return RedirectToAction("Validation");
+            }
+
+            // Check for finish date
+            if (string.IsNullOrEmpty(CourseData.FinishDate))
+            {
+                TempData["ErrorMessage"] = "Course finish date cannot be empty.";
                 return RedirectToAction("Validation");
             }
 
@@ -72,6 +87,20 @@ namespace School.Controllers
             if (string.IsNullOrEmpty(CourseData.CourseName))
             {
                 TempData["ErrorMessage"] = "Course name cannot be empty";
+                return RedirectToAction("Validation");
+            }
+
+            // Check for course code field from the input
+            if (string.IsNullOrEmpty(CourseData.CourseCode))
+            {
+                TempData["ErrorMessage"] = "Course code cannot be empty";
+                return RedirectToAction("Validation");
+            }
+
+            // Check for teacher id field from the input
+            if (CourseData.TeacherId == 0)
+            {
+                TempData["ErrorMessage"] = "Teacher Id cannot be empty";
                 return RedirectToAction("Validation");
             }
 
@@ -101,6 +130,87 @@ namespace School.Controllers
 
             // redirects to list action
             return RedirectToAction("List");
+        }
+
+        // GET : CoursePage/Edit/{id}
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            Course SelectedCourse = _api.FindCourse(id);
+            ViewData["Id"] = id;
+            return View(SelectedCourse);
+
+        }
+
+        // POST: CoursePage/Update/{id}
+        [HttpPost]
+        public IActionResult Update(int id, string CourseCode,int TeacherId, string StartDate, string FinishDate, string CourseName)
+        {
+            Course UpdateCourse = new Course();
+
+            UpdateCourse.CourseCode = CourseCode;
+            UpdateCourse.TeacherId = TeacherId;
+            UpdateCourse.StartDate = StartDate.ToString();
+            UpdateCourse.FinishDate = FinishDate.ToString();
+            UpdateCourse.CourseName = CourseName;
+
+            // Check for start date
+            if (string.IsNullOrEmpty(UpdateCourse.StartDate))
+            {
+                TempData["ErrorMessage"] = "Course start date cannot be empty.";
+                return RedirectToAction("Validation");
+            }
+
+            // Check for future start date
+            if (!string.IsNullOrEmpty(UpdateCourse.StartDate) && DateTime.Parse(UpdateCourse.StartDate) > DateTime.Now)
+            {
+                TempData["ErrorMessage"] = "Course start date cannot be in future.";
+                return RedirectToAction("Validation");
+            }
+
+            // Check for finish date
+            if (string.IsNullOrEmpty(UpdateCourse.FinishDate))
+            {
+                TempData["ErrorMessage"] = "Course finish date cannot be empty.";
+                return RedirectToAction("Validation");
+            }
+
+            // Check for future finish date
+            if (!string.IsNullOrEmpty(UpdateCourse.FinishDate) && DateTime.Parse(UpdateCourse.FinishDate) > DateTime.Now)
+            {
+                TempData["ErrorMessage"] = "Course finish date cannot be in future.";
+                return RedirectToAction("Validation");
+            }
+
+            // Check for course name field from the input
+            if (string.IsNullOrEmpty(UpdateCourse.CourseName))
+            {
+                TempData["ErrorMessage"] = "Course name cannot be empty";
+                return RedirectToAction("Validation");
+            }
+
+            // Check for course code field from the input
+            if (string.IsNullOrEmpty(UpdateCourse.CourseCode))
+            {
+                TempData["ErrorMessage"] = "Course code cannot be empty";
+                return RedirectToAction("Validation");
+            }
+
+            // Check for teacher id field from the input
+            if (UpdateCourse.TeacherId==0)
+            {
+                TempData["ErrorMessage"] = "Teacher Id cannot be empty";
+                return RedirectToAction("Validation");
+            }
+
+            else
+            {
+                _api.UpdateCourse(id, UpdateCourse);
+
+                // redirects to show course
+                return RedirectToAction("Show", new { id = id });
+            }
+          
         }
 
     }

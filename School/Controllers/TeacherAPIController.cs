@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
+using Mysqlx.Datatypes;
 using School.Models;
 using System.Diagnostics;
 
@@ -51,7 +52,8 @@ namespace School.Controllers
                 using (MySqlDataReader ResultSet = Command.ExecuteReader())
                 {
                     // Loop Through Each Row of the Result Set
-                    while (ResultSet.Read()) {
+                    while (ResultSet.Read())
+                    {
                         Teacher CurrentTeacher = new Teacher();
                         List<Course> Courses = new List<Course>();
                         // Access Column information by the DB column name as an index
@@ -81,6 +83,73 @@ namespace School.Controllers
             // Return the final list of teachers
             return Teachers;
         }
+
+
+
+        //[HttpGet]
+        //[Route(template: "ListTeachers")]
+        //public List<Teacher> ListTeachers(string SearchKey = null)
+        //{
+        //    // Create an empty list of Authors
+        //    List<Teacher> Teachers = new List<Teacher>();
+
+        //    // 'using' will close the connection after the code executes
+        //    using (MySqlConnection Connection = _context.AccessDatabase())
+        //    {
+        //        Connection.Open();
+        //        //Establish a new command (query) for our database
+        //        MySqlCommand Command = Connection.CreateCommand();
+
+
+        //        string query = "select * from teachers";
+
+        //        // search criteria, first, last or first + last
+        //        if (SearchKey != null)
+        //        {
+        //            query += " where lower(teacherfname) like @key or lower(teacherlname) like @key or lower(concat(teacherfname,' ',teacherlname)) like @key";
+        //            Command.Parameters.AddWithValue("@key", $"%{SearchKey}%");
+        //        }
+        //        //SQL QUERY
+        //        Command.CommandText = query;
+        //        Command.Prepare();
+
+        //        // Gather Result Set of Query into a variable
+        //        using (MySqlDataReader ResultSet = Command.ExecuteReader())
+        //        {
+        //            //Loop Through Each Row the Result Set
+        //            while (ResultSet.Read())
+        //            {
+        //                //Access Column information by the DB column name as an index
+        //                int Id = Convert.ToInt32(ResultSet["teacherid"]);
+        //                string FirstName = ResultSet["teacherfname"].ToString();
+        //                string LastName = ResultSet["teacherlname"].ToString();
+        //                string EmployeeNumber = ResultSet["employeenumber"].ToString();
+        //                string HireDate = ResultSet["hiredate"] != DBNull.Value ? Convert.ToDateTime(ResultSet["hiredate"]).ToString("yyyy/MM/dd HH:mm:ss") : "";
+        //                Decimal Salary = Convert.ToDecimal(ResultSet["salary"]);
+
+
+        //                //short form for setting all properties while creating the object
+        //                Teacher CurrentTeacher = new Teacher()
+        //                {
+        //                    TeacherId = Id,
+        //                    TeacherFName = FirstName,
+        //                    TeacherLName = LastName,
+        //                    EmployeeNumber = EmployeeNumber,
+        //                    HireDate = HireDate,
+        //                    Salary = Salary,
+        //                };
+
+        //                Teachers.Add(CurrentTeacher);
+
+        //            }
+        //        }
+        //    }
+
+
+        //    //Return the final list of authors
+        //    return Teachers;
+        //}
+
 
 
         /// <summary>
@@ -299,7 +368,67 @@ namespace School.Controllers
             {
                 return $"The teacher with given id {TeacherId} is not found";
             }
-             
+
+        }
+
+
+        /// curl -X "PUT" -H "Content-Type:application/json" -d "{\"teacherFName\": \"Robert\", \"teacherLName\": \"Stokes\", \"employeeNumber\": \"T102\", \"hireDate\": \"2024-11-22 00:00:00\", \"salary\": 55.25}"  "https://localhost:7151/api/Teacher/UpdateTeacher/30"
+
+        /// <summary>
+        /// Updates a Teacher in the database. Data is Teacher object, request query contains ID
+        /// </summary>
+        /// <param name="TeacherData">Teacher Object</param>
+        /// <param name="TeacherId">The Teacher ID primary key</param>
+        /// <example>
+        /// PUT: api/Teacher/UpdateTeacher/4
+        /// Headers: Content-Type: application/json
+        /// Request Body:
+        /// {
+        ///	    "TeacherFname":Alice",
+        ///	    "TeacherLname":"Johnson",
+        ///	    "EmployeeNumber":"T222",
+        ///	    "HireDate":"2024-11-03 00:00:00",
+        ///	    "Salary":"60.50"
+        /// } -> 
+        /// {
+        ///     "TeacherId":4,
+        ///     "TeacherFname":Alice",
+        ///	    "TeacherLname":"Johnson",
+        ///	    "EmployeeNumber":"T222",
+        ///	    "HireDate":"2024-11-03 00:00:00",
+        ///	    "Salary":"60.50"
+        /// }
+        /// </example>
+        /// <returns>
+        /// The updated Teacher object
+        /// </returns>
+
+        [HttpPut(template: "UpdateTeacher/{TeacherId}")]
+        public Teacher UpdateTeacher(int TeacherId, [FromBody] Teacher TeacherData)
+        {
+            // 'using' will close the connection after the code executes
+            using (MySqlConnection Connection = _context.AccessDatabase())
+            {
+                // Open the connection
+                Connection.Open();
+
+                // Establish a new command (query) for our database
+                MySqlCommand Command = Connection.CreateCommand();
+
+                Command.CommandText = "UPDATE teachers SET teacherfname=@teacherfname, teacherlname=@teacherlname, employeenumber=@employeenumber, hiredate=@hiredate, salary=@salary where teacherid=@id";
+                Command.Parameters.AddWithValue("@teacherfname", TeacherData.TeacherFName);
+                Command.Parameters.AddWithValue("@teacherlname", TeacherData.TeacherLName);
+                Command.Parameters.AddWithValue("@employeenumber", TeacherData.EmployeeNumber);
+                Command.Parameters.AddWithValue("@hiredate", TeacherData.HireDate);
+                Command.Parameters.AddWithValue("@salary", TeacherData.Salary);
+
+                Command.Parameters.AddWithValue("@id", TeacherId);
+
+                Command.ExecuteNonQuery();
+            }
+
+
+                return FindTeacher(TeacherId);
         }
 
 

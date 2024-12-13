@@ -56,7 +56,7 @@ namespace School.Controllers
                         CurrentStudent.StudentFName = (ResultSet["studentfname"]).ToString();
                         CurrentStudent.StudentLName = (ResultSet["studentlname"]).ToString();
                         CurrentStudent.StudentNumber = (ResultSet["studentnumber"]).ToString();
-                        CurrentStudent.EnrolDate = ResultSet["enroldate"] != DBNull.Value ? Convert.ToDateTime(ResultSet["enroldate"]).ToString("yyyy/MM/dd") : "";
+                        CurrentStudent.EnrolDate = Convert.ToDateTime(ResultSet["enroldate"]).ToString("yyyy-MM-dd");
                         // Add it to the Students list
                         Students.Add(CurrentStudent);
                     }
@@ -108,7 +108,7 @@ namespace School.Controllers
                         SelectedStudent.StudentFName = (ResultSet["studentfname"]).ToString();
                         SelectedStudent.StudentLName = (ResultSet["studentlname"]).ToString();
                         SelectedStudent.StudentNumber = (ResultSet["studentnumber"]).ToString();
-                        SelectedStudent.EnrolDate = ResultSet["enroldate"] != DBNull.Value ? Convert.ToDateTime(ResultSet["enroldate"]).ToString("yyyy/MM/dd") : "";
+                        SelectedStudent.EnrolDate = Convert.ToDateTime(ResultSet["enroldate"]).ToString("yyyy-MM-dd");
 
                     }
                 }
@@ -214,6 +214,62 @@ namespace School.Controllers
             {
                 return $"The student with given id {StudentId} is not found";
             }
+        }
+
+        /// curl -X "PUT" -H "Content-Type: application/json" -d "{\"studentFName\": \"James\",\"studentLName\": \"Oliver\",\"studentNumber\": \"N3409\",\"enrolDate\": \"2024-11-14\"}" "https://localhost:7151/api/Student/UpdateStudent/36"
+
+        /// <summary>
+        /// Updates a Student in the database. Data is Student object, request query contains ID
+        /// </summary>
+        /// <param name="StudentData">Student Object</param>
+        /// <param name="StudentId">The Student ID primary key</param>
+        /// <example>
+        /// PUT: api/Student/UpdateStudent/4
+        /// Headers: Content-Type: application/json
+        /// Request Body:
+        /// {
+        ///	    "StudentFname":Alice",
+        ///	    "StudentLname":"Johnson",
+        ///	    "StudentNumber":"T222",
+        ///	    "EnrolDate":"2024-11-03 00:00:00"
+        /// } -> 
+        /// {
+        ///     "StudentId":4,
+        ///	    "StudentFname":Alice",
+        ///	    "StudentLname":"Johnson",
+        ///	    "StudentNumber":"T222",
+        ///	    "EnrolDate":"2024-11-03 00:00:00"
+        /// }
+        /// </example>
+        /// <returns>
+        /// The updated Student object
+        /// </returns>
+
+        [HttpPut(template: "UpdateStudent/{StudentId}")]
+        public Student UpdateStudent(int StudentId,[FromBody] Student StudentData)
+        {
+            // 'using' will close the connection after the code executes
+            using (MySqlConnection Connection = _context.AccessDatabase())
+            {
+                // Open the connection
+                Connection.Open();
+
+                // Establish a new command (query) for our database
+                MySqlCommand Command = Connection.CreateCommand();
+
+                Command.CommandText = "UPDATE students SET studentfname=@studentfname, studentlname=@studentlname, studentnumber=@studentnumber, enroldate=@enroldate where studentid=@id";
+                Command.Parameters.AddWithValue("@studentfname", StudentData.StudentFName);
+                Command.Parameters.AddWithValue("@studentlname", StudentData.StudentLName);
+                Command.Parameters.AddWithValue("@studentnumber", StudentData.StudentNumber);
+                Command.Parameters.AddWithValue("@enroldate", StudentData.EnrolDate);
+
+                Command.Parameters.AddWithValue("@id", StudentId);
+
+                Command.ExecuteNonQuery();
+            }
+
+
+            return FindStudent(StudentId);
         }
 
     }
