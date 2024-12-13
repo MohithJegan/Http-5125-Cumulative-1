@@ -100,13 +100,13 @@ The `CourseAjaxPageController.cs` handles course data with JavaScript and Ajax, 
 ## API Endpoints
 
 - **Teacher API**:  
-  `GET /api/ListTeachers`,  `GET /api/ListCourses`,  `GET /api/FindTeacher/{id}`, `POST /api/AddTeacher`, `DELETE /api/DeleteTeacher/{TeacherId}`, `PUT /api/UpdateTeacher`
+  `GET /api/ListTeachers`,  `GET /api/ListCourses`,  `GET /api/FindTeacher/{id}`, `POST /api/AddTeacher`, `DELETE /api/DeleteTeacher/{TeacherId}`, `PUT /api/UpdateTeacher/{TeacherId}`
 
 - **Course API**:  
-  `GET /api/ListCourses`, `GET /api/FindCourse/{id}`, `POST /api/AddCourse`, `DELETE /api/DeleteCourse/{CourseId}`, `PUT /api/UpdateCourse`
+  `GET /api/ListCourses`, `GET /api/FindCourse/{id}`, `POST /api/AddCourse`, `DELETE /api/DeleteCourse/{CourseId}`, `PUT /api/UpdateCourse/{CourseId}`
 
 - **Student API**:  
-  `GET /api/ListStudents`, `GET /api/FindStudent/{id}`, `POST /api/AddStudent`, `DELETE /api/DeleteStudent/{StudentId}`, `PUT /api/UpdateStudent`
+  `GET /api/ListStudents`, `GET /api/FindStudent/{id}`, `POST /api/AddStudent`, `DELETE /api/DeleteStudent/{StudentId}`, `PUT /api/UpdateStudent/{StudentId}`
 
 ## Views and Pages
 ### 1. TeacherPage
